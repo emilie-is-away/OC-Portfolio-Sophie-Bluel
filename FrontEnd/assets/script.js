@@ -57,7 +57,6 @@ function changerBoutonActif(boutonClique) {
   boutonClique.classList.add("active");
 }
 
-
 function isLoggedIn() {
   return localStorage.getItem("token") !== null;
 }
@@ -81,13 +80,12 @@ function displayEditMode() {
   if (loginLink) {
     loginLink.textContent = "logout";
     loginLink.addEventListener("click", function () {
-  localStorage.removeItem("token");
-  showNotification("Vous avez été déconnecté.");
-
-  setTimeout(() => {
-    window.location.href = "index.html";
-  }, 1000);
-});
+      localStorage.removeItem("token");
+      showNotification("Déconnexion en cours...");
+      setTimeout(() => {
+        window.location.href = "index.html";
+      }, 1000);
+    });
   }
 
   createModal();
@@ -119,15 +117,12 @@ function showNotification(message, type = "success") {
   `;
 
   document.body.appendChild(notif);
-
   setTimeout(() => notif.style.opacity = "1", 10);
-
   setTimeout(() => {
     notif.style.opacity = "0";
     setTimeout(() => notif.remove(), 300);
   }, 3000);
 }
-
 
 function createConfirmModal() {
   if (document.getElementById("confirm-modal")) return;
@@ -220,7 +215,7 @@ function createModal() {
         <button id="btn-add-photo">Ajouter une photo</button>
       </div>
 
-      <div id="modal-form" class="modal-view" style="display:none;">
+      <div id="modal-form" class="modal-view" style="display:none; margin: 20px;">
         <button class="modal-back"><i class="fa-solid fa-arrow-left"></i></button>
         <h4><center>Ajout photo</center></h4>
         <form id="form-add-work">
@@ -307,7 +302,6 @@ function bindModalEvents(editButton) {
   backBtn.addEventListener("click", showGalleryView);
 }
 
-
 function fillModalGallery() {
   const container = document.querySelector(".modal-photos");
   container.innerHTML = "";
@@ -344,7 +338,6 @@ function fillModalGallery() {
   });
 }
 
-
 async function deleteWork(id) {
   const token = localStorage.getItem("token");
 
@@ -357,7 +350,6 @@ async function deleteWork(id) {
 
   return response.status === 204;
 }
-
 
 async function fillCategoriesSelect() {
   const select = document.getElementById("input-category");
@@ -376,6 +368,27 @@ async function fillCategoriesSelect() {
 
 let selectedFile = null;
 
+function verifierFormulaire() {
+  const titleInput = document.getElementById("input-title");
+  const categoryInput = document.getElementById("input-category");
+  const submitBtn = document.getElementById("btn-submit");
+
+  // Les 3 conditions : photo + titre + catégorie
+  const formulaireComplet = selectedFile !== null
+    && titleInput.value.trim() !== ""
+    && categoryInput.value !== "";
+
+  if (formulaireComplet) {
+    submitBtn.disabled = false;
+    submitBtn.classList.remove("btn-disabled");
+    submitBtn.classList.add("btn-active");
+  } else {
+    submitBtn.disabled = true;
+    submitBtn.classList.remove("btn-active");
+    submitBtn.classList.add("btn-disabled");
+  }
+}
+
 function bindImagePreview() {
   const input = document.getElementById("input-image");
   const uploadZone = document.getElementById("upload-zone");
@@ -384,6 +397,12 @@ function bindImagePreview() {
   submitBtn.disabled = true;
   submitBtn.classList.add("btn-disabled");
   submitBtn.classList.remove("btn-active");
+
+  const titleInput = document.getElementById("input-title");
+  titleInput.addEventListener("input", verifierFormulaire);
+
+  const categoryInput = document.getElementById("input-category");
+  categoryInput.addEventListener("change", verifierFormulaire);
 
   input.addEventListener("change", function () {
     const file = input.files[0];
@@ -402,9 +421,7 @@ function bindImagePreview() {
       uploadZone.innerHTML = "";
       uploadZone.appendChild(preview);
 
-      submitBtn.disabled = false;
-      submitBtn.classList.remove("btn-disabled");
-      submitBtn.classList.add("btn-active");
+      verifierFormulaire();
     }
   });
 }
@@ -496,7 +513,6 @@ function resetForm() {
   bindImagePreview();
 }
 
-
 document.addEventListener("DOMContentLoaded", function () {
   fetchWorks();
 
@@ -506,56 +522,54 @@ document.addEventListener("DOMContentLoaded", function () {
     fetchCategories();
   }
 
+  const contactForm = document.querySelector("#contact form");
+  if (contactForm) {
+    contactForm.addEventListener("submit", function (e) {
+      e.preventDefault();
 
-const contactForm = document.querySelector("#contact form");
-if (contactForm) {
-  contactForm.addEventListener("submit", function (e) {
-    e.preventDefault();
+      const name = document.getElementById("name");
+      const email = document.getElementById("email");
+      const message = document.getElementById("message");
 
-    const name = document.getElementById("name");
-    const email = document.getElementById("email");
-    const message = document.getElementById("message");
+      document.querySelectorAll(".contact-error").forEach(el => el.remove());
 
-    document.querySelectorAll(".contact-error").forEach(el => el.remove());
+      let isValid = true;
 
-    let isValid = true;
+      if (!name.value.trim()) {
+        afficherErreurContact(name, "Veuillez entrer votre nom.");
+        isValid = false;
+      }
 
-    if (!name.value.trim()) {
-      afficherErreurContact(name, "Veuillez entrer votre nom.");
-      isValid = false;
-    }
+      if (!email.value.trim() || !email.value.includes("@")) {
+        afficherErreurContact(email, "Veuillez entrer un email valide.");
+        isValid = false;
+      }
 
-    if (!email.value.trim() || !email.value.includes("@")) {
-      afficherErreurContact(email, "Veuillez entrer un email valide.");
-      isValid = false;
-    }
+      if (!message.value.trim()) {
+        afficherErreurContact(message, "Veuillez entrer un message.");
+        isValid = false;
+      }
 
-    if (!message.value.trim()) {
-      afficherErreurContact(message, "Veuillez entrer un message.");
-      isValid = false;
-    }
+      if (isValid) {
+        showNotification("Message envoyé avec succès !");
+        contactForm.reset();
+      }
+    });
+  }
 
-    if (isValid) {
-      showNotification("Message envoyé avec succès !");
-      contactForm.reset();
-    }
-  });
-}
+  function afficherErreurContact(input, message) {
+    const error = document.createElement("p");
+    error.textContent = message;
+    error.classList.add("contact-error");
+    error.style.color = "red";
+    error.style.fontSize = "0.85rem";
+    error.style.marginTop = "4px";
+    input.insertAdjacentElement("afterend", error);
+  }
 
-function afficherErreurContact(input, message) {
-  const error = document.createElement("p");
-  error.textContent = message;
-  error.classList.add("contact-error");
-  error.style.color = "red";
-  error.style.fontSize = "0.85rem";
-  error.style.marginTop = "4px";
-  input.insertAdjacentElement("afterend", error);
-}
-
-const urlParams = new URLSearchParams(window.location.search);
-if (urlParams.get("login") === "success") {
-  showNotification("Connexion réussie !");
-  window.history.replaceState({}, document.title, "index.html");
-}
-
+  const urlParams = new URLSearchParams(window.location.search);
+  if (urlParams.get("login") === "success") {
+    showNotification("Connexion réussie !");
+    window.history.replaceState({}, document.title, "index.html");
+  }
 });

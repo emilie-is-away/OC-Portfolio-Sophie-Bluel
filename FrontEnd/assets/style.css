@@ -57,6 +57,11 @@ body {
 	font-size: 14px;
 }
 
+p {
+	font-family: 'Work Sans';
+	font-weight: lighter;
+}
+
 header {
 	display: flex;
 	justify-content: space-between;
@@ -94,7 +99,7 @@ h4 {
 	/**font-family: 'Syne', sans-serif;**/
 	text-align: center;
 	margin-bottom: 20px;
-  margin-top: 20px;
+  	margin-top: 35px;
 }
 
 nav ul {
@@ -104,7 +109,7 @@ nav ul {
 }
 
 nav li {
-	padding: 0 10px;
+	padding: 0 20px;
 	font-size: 1.2em;
 }
 
@@ -135,11 +140,14 @@ li:hover {
 #introduction img {
 	display: block;
 	margin: auto;
-	width: 80%;
+	width: 135%;
 }
 
 #introduction article {
 	flex: 1;
+	padding-left: 115px;
+    padding-right: 185px;
+    margin-left: 90px;
 }
 
 #introduction h2 {
@@ -311,7 +319,7 @@ footer nav ul {
 	background-color: black;
 	color: white;
 	text-align: center;
-	padding: 10px 0;
+	padding: 20px 0;
 	font-size: 1rem;
 }
 
@@ -325,19 +333,26 @@ footer nav ul {
 
 
 
-#portfolio h2 button {
-	background: none;
-	border: none;
-	cursor: pointer;
-	color: black;
-	font-family: 'Work Sans';
-	font-size: 0.9rem;
-	margin-left: 15px;
-	display: inline-flex;
-	align-items: center;
-	gap: 6px;
+#portfolio h2 {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1em;
 }
 
+#portfolio h2 button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: black;
+  font-family: 'Work Sans';
+  font-size: 0.9rem;
+  margin-left: 20px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  vertical-align: middle;
+}
 
 
 img.instagram-icon {
@@ -359,8 +374,8 @@ img.instagram-icon {
 .modal-container {
 	background: white;
 	border-radius: 10px;
-	padding: 40px;
-  width: 615px;
+	padding: 15px 30px 10px 30px;
+  	width: 615px;
 	max-width: 90%;
 	position: relative;
 	max-height: 85vh;
@@ -387,11 +402,12 @@ img.instagram-icon {
 	cursor: pointer;
 }
 
-.modal-container hr {
-	border: none;
-	border-top: 1px solid #ccc;
-	margin: 20px 0;
-}
+#modal-gallery hr {
+  border: none;
+  border-top: 1px solid #ccc;
+  margin: 20px auto;
+  width: 90%;
+}	
 
 #modal-gallery {
   margin: 50px;
@@ -494,8 +510,9 @@ img.instagram-icon {
 }
 
 .form-field label {
-	font-size: 0.9rem;
+	font-size: 15px;
 	font-weight: bold;
+	margin-bottom: 10px;
 }
 
 .form-field input,
@@ -525,7 +542,7 @@ img.instagram-icon {
 }
 
 #input-category {
-  margin-bottom: 10px;
+  margin-bottom: 15px;
 }
 
 #form-add-work {
@@ -536,7 +553,7 @@ img.instagram-icon {
 
 #btn-submit {
 	display: block;
-	margin: 20px auto 0;
+	margin: 25px auto 0;
 	padding: 10px 80px;
 	border: none;
 	border-radius: 50px;
