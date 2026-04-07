@@ -2,6 +2,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
   const loginForm = document.querySelector("#login-form");
 
+    // soumission du formulaire
   loginForm.addEventListener("submit", async function(event) {
 
     event.preventDefault();
@@ -27,10 +28,9 @@ document.addEventListener("DOMContentLoaded", function () {
       const data = await response.json();
 
       if (response.ok) {
-
-        localStorage.setItem("token", data.token);
-        window.location.href = "index.html?login=success";
-
+          localStorage.removeItem("token");
+          localStorage.setItem("token", data.token);
+          window.location.href = "index.html?login=success";
       } else {
 
         errorMessage.textContent = "Email ou mot de passe incorrect.";
