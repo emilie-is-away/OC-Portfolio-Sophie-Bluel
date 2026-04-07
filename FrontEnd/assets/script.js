@@ -1,5 +1,7 @@
+// GÉNÉRALES
 let worksData = [];
 
+// GALERIE 
 async function fetchWorks() {
   const response = await fetch("http://localhost:5678/api/works");
   worksData = await response.json();
@@ -20,6 +22,8 @@ function afficherTravaux(works) {
     gallery.appendChild(figure);
   });
 }
+
+// FILTRES PAR CATÉGORIE  
 
 async function fetchCategories() {
   const response = await fetch("http://localhost:5678/api/categories");
@@ -57,6 +61,9 @@ function changerBoutonActif(boutonClique) {
   boutonClique.classList.add("active");
 }
 
+// AUTHENTIFICATION ET MODE ÉDITION
+
+// vérification du token dans localStorage
 function isLoggedIn() {
   return localStorage.getItem("token") !== null;
 }
@@ -94,6 +101,7 @@ function displayEditMode() {
   bindFormSubmit();
 }
 
+// NOTIFICATIONS
 function showNotification(message, type = "success") {
   const existing = document.getElementById("notification");
   if (existing) existing.remove();
@@ -123,6 +131,8 @@ function showNotification(message, type = "success") {
     setTimeout(() => notif.remove(), 300);
   }, 3000);
 }
+
+// MODALE DE CONFIRMATION DE SUPPRESSION
 
 function createConfirmModal() {
   if (document.getElementById("confirm-modal")) return;
@@ -197,6 +207,7 @@ function openConfirmModal(onConfirm) {
   });
 }
 
+// MODALE PRINCIPALE : GALERIE ET FORMULAIRE
 function createModal() {
   if (document.getElementById("modal")) return;
 
@@ -302,6 +313,7 @@ function bindModalEvents(editButton) {
   backBtn.addEventListener("click", showGalleryView);
 }
 
+// GALERIE DE LA MODALE --> SUPPRESSION
 function fillModalGallery() {
   const container = document.querySelector(".modal-photos");
   container.innerHTML = "";
@@ -351,6 +363,7 @@ async function deleteWork(id) {
   return response.status === 204;
 }
 
+// FORMULAIRE : AJOUT DE PROJET
 async function fillCategoriesSelect() {
   const select = document.getElementById("input-category");
   if (select.children.length > 1) return;
@@ -513,13 +526,15 @@ function resetForm() {
   bindImagePreview();
 }
 
+// INITIALISATION AU CHARGEMENT
+
 document.addEventListener("DOMContentLoaded", function () {
   fetchWorks();
 
   if (isLoggedIn()) {
-    displayEditMode();
+    displayEditMode(); // MODE ADMIN
   } else {
-    fetchCategories();
+    fetchCategories(); // MODE VISITEUR
   }
 
   const contactForm = document.querySelector("#contact form");
